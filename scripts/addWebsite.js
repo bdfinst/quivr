@@ -20,9 +20,12 @@ const getBrain = async () => {
   }
 
   const data = await response.json()
+  const brain = data.brains.filter(
+    brain => brain.name.toLowerCase() === 'demo'
+  )[0]
 
-  console.log(data.brains[1])
-  return data.brains[1].id
+  console.log(brain)
+  return brain.id
 }
 
 const findSubPages = async url => {
@@ -66,6 +69,69 @@ const addContent = async url => {
   console.log(response.json().data)
 }
 
+const getMarkdownFiles = async (org, repo) => {
+  try {
+    const apiUrl = `https://api.github.com/repos/${org}/${repo}/contents`
+    const response = await fetch(apiUrl)
+    if (!response.ok) {
+      throw new Error('Failed to fetch data from GitHub API')
+    }
+    const data = await response.json()
+
+    const markdownFiles = data.filter(file => file.name.endsWith('.md'))
+
+    return markdownFiles
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    return []
+  }
+}
+
+const fetchFiles = async (org, repo, path = '') => {
+  const apiUrl = `https://api.github.com/repos/${org}/${repo}/contents/${path}`
+  const response = await fetch(apiUrl)
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch data from GitHub API: ${response.statusText}`
+    )
+  }
+  return response.json()
+}
+
+const findMarkdownFiles = async (org, repo, path = '') => {
+  let markdownFiles = []
+  const files = await fetchFiles(org, repo, path)
+
+  for (const file of files) {
+    if (
+      file.type === 'file' &&
+      file.name.includes('adr') &&
+      file.name.endsWith('.md')
+    ) {
+      markdownFiles.push(file.path)
+    } else if (file.type === 'dir') {
+      const subdirectoryFiles = await findMarkdownFiles(org, repo, file.path)
+      markdownFiles = markdownFiles.concat(subdirectoryFiles)
+    }
+  }
+
+  return markdownFiles
+}
+
+const getAdrs = async (org, repo) => {
+  try {
+    const markdownFiles = await findMarkdownFiles(org, repo, 'adr')
+    if (markdownFiles.length > 0) {
+      console.log('Markdown files containing "adr":')
+      markdownFiles.forEach(file => console.log(file))
+    } else {
+      console.log('No Markdown files containing "adr" found.')
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
 const sites = [
   'https://docs.zarf.dev/',
   'https://minimumcd.org/',
@@ -84,4 +150,10 @@ sites.forEach(site => {
     .catch(error => {
       console.error('An error occurred:', error)
     })
+})
+
+const adrs = [{ org: 'defenseunicorns', repo: 'zarf' }]
+
+adrs.forEach(adr => {
+  getAdrs(adr.org, adr.repo)
 })
