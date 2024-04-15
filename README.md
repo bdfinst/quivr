@@ -52,7 +52,6 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
   supabase -v # Check that the installation worked
   ```
 
-
 - **Step 1**: Clone the repository:
 
   ```bash
@@ -71,18 +70,64 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
   vim .env # or emacs or vscode or nano
   ```
 
+#### Using OpenAI
+
   Update **OPENAI_API_KEY** in the `.env` file.
 
   You just need to update the `OPENAI_API_KEY` variable in the `.env` file. You can get your API key [here](https://platform.openai.com/api-keys). You need to create an account first. And put your credit card information. Don't worry, you won't be charged unless you use the API. You can find more information about the pricing [here](https://openai.com/pricing/).
 
-  > Don't want to use OpenAI and want to use Ollama instead for a completely private experience? You can find the instructions [here](https://docs.quivr.app/developers/contribution/llm/ollama).
-
-- **Step 4**: Launch the project
+  Start the database.
 
   ```bash
   supabase start
   ```
-  and then 
+
+#### Using Ollama
+
+- Install [Ollama](https://ollama.com/)
+- Modify the Quivr DB to use the Ollama Model
+  - Start the database:
+  
+  ```bash
+  $ supabase start
+  Started supabase local development setup.
+
+         API URL: http://127.0.0.1:54321
+     GraphQL URL: http://127.0.0.1:54321/graphql/v1
+          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      Studio URL: http://127.0.0.1:54323
+    Inbucket URL: http://127.0.0.1:54324
+  ```
+
+  - create a new DB migration script:
+
+  ```bash
+  $ supabase migration new ollama
+  Created new migration at supabase/migrations/<TIME_STAMP>_ollama.sql
+  ```
+
+  - Copy the Ollama migration to the new migration script
+
+  ```bash
+  cp supabase/migrations/local_20240107152745_ollama.sql <new script name>
+  ```
+
+  - Modify the new migration script to alter the `user_settings` table to use Ollama instead of ChatGPT:
+
+  ```sql
+  alter table "public"."user_settings" alter column "models" set default '["ollama/llama2","ollama/mistral"]'::jsonb;
+  ```
+
+  - Run the table migration command
+
+  ```bash
+  supabase db reset
+  ```
+
+- **Step 4**: Launch the project
+
+  and then
+
   ```bash
   docker compose pull
   docker compose up
@@ -114,7 +159,6 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
   supabase migration up
   ```
 
-
 ## Contributors ✨
 
 Thanks go to these wonderful people:
@@ -136,7 +180,6 @@ Did you get a pull request? Open it, and we'll review it as soon as possible. Ch
 ## Partners ❤️
 
 This project would not be possible without the support of our partners. Thank you for your support!
-
 
 <a href="https://ycombinator.com/">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Y_Combinator_logo.svg/1200px-Y_Combinator_logo.svg.png" alt="YCombinator" style="padding: 10px" width="70px">

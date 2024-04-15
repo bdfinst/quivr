@@ -278,9 +278,11 @@ INSERT INTO "public"."models" ("name", "price", "max_input", "max_output") VALUE
 -- Data for Name: user_settings; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."user_settings" ("user_id", "models", "max_brains", "max_brain_size", "is_premium", "api_access", "monthly_chat_credit") VALUES
-	('39418e3b-0258-4452-af60-7acfcc1263ff', '["gpt-3.5-turbo-0125", "gpt-4-0125-preview"]', 10, 50000000, false, false, 100);
+-- INSERT INTO "public"."user_settings" ("user_id", "models", "max_brains", "max_brain_size", "is_premium", "api_access", "monthly_chat_credit") VALUES
+-- 	('39418e3b-0258-4452-af60-7acfcc1263ff', '["gpt-3.5-turbo-0125", "gpt-4-0125-preview"]', 10, 50000000, false, false, 100);
 
+INSERT INTO "public"."user_settings" ("user_id", "models", "max_brains", "max_brain_size", "is_premium", "api_access", "monthly_chat_credit") VALUES
+	('39418e3b-0258-4452-af60-7acfcc1263ff', '["ollama/llama2","ollama/mistral"]', 10, 50000000, true, true, 50000);
 
 --
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
