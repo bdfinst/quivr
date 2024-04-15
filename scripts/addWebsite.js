@@ -1,6 +1,31 @@
-const puppeteer = require('puppeteer')
+import dotenv from 'dotenv'
+import fetch from 'node-fetch'
+import puppeteer from 'puppeteer'
 
-async function findSubPages(url) {
+dotenv.config()
+
+const api = 'http://localhost:5050'
+const apiKey = process.env.QUIVR_API_KEY
+
+const getBrain = async () => {
+  const options = {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${apiKey}` },
+  }
+
+  const response = await fetch(`${api}/brains/`, options)
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`)
+  }
+
+  const data = await response.json()
+
+  console.log(data.brains[1])
+  return data.brains[1].id
+}
+
+const findSubPages = async url => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
   await page.goto(url, { waitUntil: 'networkidle2' })
@@ -22,27 +47,23 @@ async function findSubPages(url) {
   return [...new Set(subPages)] // Remove duplicates
 }
 
-const addContent = url => {
+const addContent = async url => {
   const body = {
     url: url,
   }
 
-  console.log(JSON.stringify(body))
-  fetch(
-    'http://localhost:5050/crawl?brain_id=7f5bac72-991e-4483-b9ba-84282c0d144a',
-    {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer 539a9466049322081b0023ccd8472d89',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }
-  )
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error))
+  const brain = await getBrain()
+
+  const response = await fetch(`${api}/crawl?brain_id=${brain}`, {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  console.log(response.json().data)
 }
 
 const sites = [

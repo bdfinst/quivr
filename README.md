@@ -133,9 +133,15 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
   docker compose up
   ```
 
+  or, for Dev mode
+
+  ```bash
+  docker compose -f docker-compose.dev.yml up --build
+  ```
+
   If you have a Mac, go to Docker Desktop > Settings > General and check that the "file sharing implementation" is set to `VirtioFS`.
 
-  If you are a developer, you can run the project in development mode with the following command: `docker compose -f docker-compose.dev.yml up --build`
+  If you are a developer, you can run the project in development mode with: `docker compose -f docker-compose.dev.yml up --build`
 
 - **Step 5**: Login to the app
 
@@ -143,7 +149,12 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
 
   You can access Quivr backend API at [http://localhost:5050/docs](http://localhost:5050/docs)
 
-  You can access supabase at [http://localhost:54323](http://localhost:54323)
+  You can access `supabase` at [http://localhost:54323](http://localhost:54323)
+
+## Creating new users
+
+Connect to the database at [http://localhost:54323/project/default/auth/users](http://localhost:54323/project/default/auth/users) with `admin/admin` credentials to create
+new users. Auto-confirm the email.
 
 ## Updating Quivr 🚀
 

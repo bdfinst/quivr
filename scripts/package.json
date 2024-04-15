@@ -4,16 +4,18 @@
   "description": "<div align=\"center\">     <img src=\"./logo.png\" alt=\"Quivr-logo\" width=\"30%\"  style=\"border-radius: 50%; padding-bottom: 20px\"/> </div>",
   "license": "ISC",
   "author": "",
+  "type": "module",
   "main": "addWebsite.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "start": "node scripts/purge && node .",
+    "start": " node  .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.4.5",
     "node-fetch": "^3.3.2",
     "puppeteer": "^22.6.4"
   }
