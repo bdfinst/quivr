@@ -118,6 +118,20 @@ You can find the installation video [here](https://www.youtube.com/watch?v=cXBa6
   alter table "public"."user_settings" alter column "models" set default '["ollama/llama2","ollama/mistral"]'::jsonb;
   ```
 
+  - Add SQL to the end of `supabase/seed.sql` to update the default user's models
+  
+  ```sql
+  UPDATE
+    "public"."user_settings"
+  SET
+    "models" = '["ollama/llama2","ollama/mistral"]',
+    "is_premium" = TRUE,
+    "api_access" = TRUE,
+    "monthly_chat_credit" = 50000
+  WHERE
+    "user_id" = '39418e3b-0258-4452-af60-7acfcc1263ff';
+  ```
+
   - Run the table migration command
 
   ```bash
