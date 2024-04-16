@@ -1,3 +1,4 @@
+import os
 from uuid import UUID
 
 from langchain.embeddings.ollama import OllamaEmbeddings
@@ -103,6 +104,7 @@ class PostHogSettings(BaseSettings):
             )
 
 
+
 class BrainSettings(BaseSettings):
     model_config = SettingsConfigDict(validate_default=False)
     openai_api_key: str = ""
@@ -110,7 +112,7 @@ class BrainSettings(BaseSettings):
     supabase_service_key: str = ""
     resend_api_key: str = "null"
     resend_email_address: str = "brain@mail.quivr.app"
-    ollama_api_base_url: str = None
+    ollama_api_base_url: str = os.getenv("OLLAMA_API_BASE_URL")
     langfuse_public_key: str = None
     langfuse_secret_key: str = None
 
