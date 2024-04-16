@@ -152,8 +152,8 @@ sites.forEach(site => {
     })
 })
 
-const adrs = [{ org: 'defenseunicorns', repo: 'zarf' }]
+// const adrs = [{ org: 'defenseunicorns', repo: 'zarf' }]
 
-adrs.forEach(adr => {
-  getAdrs(adr.org, adr.repo)
-})
+// adrs.forEach(adr => {
+//   getAdrs(adr.org, adr.repo)
+// })

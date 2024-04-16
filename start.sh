@@ -1,4 +1,6 @@
-#ollama run llama2
+stop.sh
+
+ollama run mistral &
 
 supabase start
 docker compose pull && docker compose up
